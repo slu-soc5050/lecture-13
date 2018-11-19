@@ -8,12 +8,14 @@ lecture-13 <img src="https://slu-soc5050.github.io/images/logo.png" align="right
 [![Travis-CI Build Status](https://travis-ci.org/slu-soc5050/lecture-13.svg?branch=master)](https://travis-ci.org/slu-soc5050/lecture-13)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/slu-soc5050/lecture-13?branch=master&svg=true)](https://ci.appveyor.com/project/chris-prener/lecture-13)
 
-This is the repository for Lecture 13 of the Saint Louis University course SOC 4015/5050 - Quantitative Analysis. This lecture adds complexity to OLS regression by introducing multivariate models. Techniques for citing sources in LaTeX are also introduced.
+This is the repository for Lecture 13 of the Saint Louis University course SOC 4015/5050 - Quantitative Analysis. This lecture adds complexity to OLS regression by introducing multivariate models. Techniques for creating publication-quality tables are also introduced.
 
 ### Lecture Objectives
 At the end of this lecture and its corresponding assignments, students should be able to:
 
-1.
+1. Explain the relationship between multiple variables articulated by OLS regression models.
+2. Estimate multiple regression models using `R`.
+3. Construct publication-ready tables using `R` and Microsoft Word.
 
 ### Lecture Resources
 
