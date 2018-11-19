@@ -1,0 +1,105 @@
+---
+title: "Lecture 13 Example Code"
+author: "Christopher Prener, Ph.D."
+date: '(`r format(Sys.time(), "%B %d, %Y")`)'
+output: 
+  github_document: default
+  html_notebook: default 
+---
+
+## Introduction
+This notebook illustrates code for working with multiple regression models.
+
+## Dependencies
+This notebook requires the `stats` package from base `R` as well as:
+
+```{r load-packages}
+# tidyverse packages
+library(dplyr)         # data wrangling
+library(ggplot2)       # plotting data
+
+# other packages
+library(here)          # file path management
+library(stargazer)     # tables
+```
+
+## Load Data
+This notebook requires the `mpg` data from `ggplot2`:
+
+```{r load-data}
+autoData <- mpg
+```
+
+## Data Preparation
+We want to create a `foreign` variable:
+
+```{r clean-data}
+autoData %>%
+  mutate(foreign = ifelse(manufacturer == "audi" | manufacturer == "honda" | manufacturer == "hyundai" | 
+                            manufacturer == "land rover" | manufacturer == "nissan" | manufacturer == "subaru" |
+                            manufacturer == "toyota" | manufacturer == "volkswagen", TRUE, FALSE)) -> autoData
+```
+
+
+## Fitting OLS Models
+Models should be fit in stages and their results stored in separate objects. First, we'll fit our so-called "main effect" model:
+
+```{r fit-models}
+model1 <- lm(hwy ~ foreign, data = autoData)
+```
+
+The results are stored in a list named `model1` that can be visually inspected by clicking on the object in the Enviornment pane.
+
+We can programatically access aspects of the model with dedicated functions `base::summary()` and `stats::confint()`:
+
+```{r model1-summary}
+summary(model1)
+```
+
+The `summary()` output includes the betas, r-squared, the root mean squared error, and the f-statistic.
+
+We can also access the conifdence intervals:
+
+```{r model1-ci}
+confint(model1)
+```
+
+Finally, we can use `stats::AIC()` and `stats::BIC()` to access model fit statistics. We want to make sure we use `round()` to limit their output.
+
+```{r model1-fit}
+aic1 <- round(AIC(model1), digits = 3)
+bic1 <- round(BIC(model1), digits = 3)
+```
+
+We'll fit a second model that controls for various measures of how fuel efficient the car is:
+
+```{r model2}
+model2 <- lm(hwy ~ foreign+displ+cyl+cty, data = autoData)
+aic2 <- round(AIC(model2), digits = 3)
+bic2 <- round(BIC(model2), digits = 3)
+```
+
+## Regression Tables
+We can use `stargazer` to produce a publication-ready table in `html` that can be imported into Microsoft Word:
+
+```{r model-table}
+stargazer(model1, model2,
+  title = "Regression Results",
+  add.lines = list(c("AIC", aic1, aic2),c("BIC", bic1, bic2)), 
+  omit.stat = "rsq", df = FALSE, 
+  type = "html", out = here("extras", "models.html"))
+```
+
+## Descriptive Statistics Tables
+We can also create a replacement for the handout's descriptive statistics table:
+
+```{r descriptives-table}
+autoData %>%
+  select(hwy, foreign, displ, cyl, cty) -> autoSub
+
+stargazer(data.frame(autoSub), 
+  title = "Descriptive Statistics",
+  summary = TRUE, omit.summary.stat = c("p25", "p75"),
+  type = "html", out = here("extras", "descriptives.html"))
+```
+
