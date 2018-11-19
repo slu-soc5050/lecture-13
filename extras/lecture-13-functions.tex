@@ -1,0 +1,92 @@
+\documentclass{tufte-handout}
+
+\usepackage{xcolor}
+
+% set hyperlink attributes
+\hypersetup{colorlinks}
+
+% set image attributes:
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+% indent subsections
+\newenvironment{subs}
+  {\adjustwidth{3em}{0pt}}
+  {\endadjustwidth}
+
+
+% ============================================================
+
+% define the title
+\title{SOC 4015/5050: Lecture 13 Functions}
+\author{Christopher Prener, Ph.D.}
+\date{Fall 2018}
+% ============================================================
+\begin{document}
+% ============================================================
+\maketitle % generates the title
+% ============================================================
+
+\vspace{5mm}
+\section{Packages}
+\begin{itemize}
+\item \texttt{base}
+\item \texttt{stargazer}
+\item \texttt{stats}
+\end{itemize}
+
+\vspace{5mm}
+\section{Linear Model}
+\begin{subs}
+\subsection{Multiple Regression Model}
+\noindent \texttt{stats::}{\color{red}\texttt{lm}}\texttt{(formula = \textit{yvar} \textasciitilde\ \textit{xvar1}$+$\textit{xvar2}$+$\textit{xvar3}, \\data = \textit{dataFrame})}
+
+\vspace{3mm}
+\subsection{Retrieve Model Output}
+\noindent \texttt{base::}{\color{red}\texttt{summary}}\texttt{(\textit{modelObject})}
+
+\vspace{3mm}
+\subsection{Confidence Intervals}
+\noindent \texttt{stats::}{\color{red}\texttt{confint}}\texttt{(\textit{modelObject})}
+
+\vspace{3mm}
+\subsection{Akaike's Information Criterion (AIC)}
+\noindent \texttt{stats::}{\color{red}\texttt{AIC}}\texttt{(\textit{modelObject})}
+
+\vspace{3mm}
+\subsection{Bayesian Information Criterion (AIC)}
+\noindent \texttt{stats::}{\color{red}\texttt{BIC}}\texttt{(\textit{modelObject})}
+\end{subs}
+
+\vspace{5mm}
+\section{Rounding (Review)}
+\noindent \texttt{base::}{\color{red}\texttt{round}}\texttt{(\textit{x}, digits = \textit{val})}
+
+\vspace{5mm}
+\section{Regression Tables}
+\begin{subs}
+\subsection{Including Multiple Models}
+\noindent \texttt{stargazer::}{\color{red}\texttt{stargazer}}\texttt{(\textit{models}, title = "\textit{table title}")}
+
+\vspace{3mm}
+\subsection{Adding New Summary Statistics}
+\noindent \texttt{stargazer::}{\color{red}\texttt{stargazer}}\texttt{(\textit{models}, title = "\textit{table title}",} 
+\par \texttt{add.lines = list(c("\textit{text}", \textit{value}, \textit{value})))}
+
+\vspace{3mm}
+\subsection{Omitting Summary Statistics}
+\noindent \texttt{stargazer::}{\color{red}\texttt{stargazer}}\texttt{(\textit{models}, title = "\textit{table title}", \\add.lines = list(c("\textit{text}", \textit{value}, \textit{value})), 
+\\ omit.stat = \textit{stat}, df = FALSE)}
+
+\vspace{3mm}
+\subsection{Creating Output}
+\noindent \texttt{stargazer::}{\color{red}\texttt{stargazer}}\texttt{(\textit{models}, title = "\textit{table title}", \\add.lines = list(c("\textit{text}", \textit{value}, \textit{value})),  
+\\ omit.stat = \textit{stat}, df = FALSE, type = "html", \\out = \textit{filepath})}
+\end{subs}
+
+\vspace{5mm}
+\section{Descriptive Statistics Tables}
+\noindent \texttt{stargazer::}{\color{red}\texttt{stargazer}}\texttt{(data.frame(\textit{data}), title = "\textit{table title}", \\ summary = TRUE,  omit.summary.stat = c("p25", "p75"), \\type = "html", out = \textit{filepath})}
+
+% ============================================================
+\end{document}

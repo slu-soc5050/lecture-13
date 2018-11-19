@@ -1,0 +1,93 @@
+\documentclass{tufte-handout}
+
+\usepackage{xcolor}
+
+% set image attributes:
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+% set hyperlink attributes
+\hypersetup{colorlinks}
+
+% create environment for bottom paragraph:
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
+
+\usepackage{enumerate}
+
+% set table attributes
+\usepackage{tabu}
+\usepackage{booktabs}
+
+% ============================================================
+
+% define the title
+\title{SOC 4015/5050: Lab-12 - Multiple Regression}
+\author{Christopher Prener, Ph.D.}
+\date{Fall 2018}
+
+% ============================================================
+
+\begin{document}
+
+% ============================================================
+
+\maketitle % generates the title
+
+% ============================================================
+
+\vspace{5mm}
+\section{Directions}
+Please complete all steps below. All work should be uploaded to your GitHub assignment repository by 4:15pm on Monday, November 19\textsuperscript{th}, 2018. All data can be obtained from the \texttt{testDriveR} package's \texttt{auto17} data set.
+
+\vspace{5mm}
+\section{Analysis Development}
+Using RStudio and your operating system's file manager, create an R Project in the \textit{existing} directory in your assignments repository named \texttt{Lab-11}. Add a \texttt{README.md} file, notebook, and all necessary folders before beginning.\sidenote{This initial section follows the project workflow that is available in the \texttt{lecture-03} repo!}
+
+\vspace{5mm}
+\section{Set-up}
+\begin{enumerate}
+\item Construct a hypothesis and null hypothesis for the relationship between fuel cost (\texttt{fuelCost}) and engine size (represented by \texttt{displ}) that also accounts for characteristics of the engine (represented by \texttt{cyl} and \texttt{gears}) as well as the highway fuel efficiency (\texttt{hwy}).
+\item Given the number of RHS variables and the sample size of the \texttt{auto17} data, are we at risk of overfitting the model?
+\end{enumerate}
+
+\vspace{3mm}
+\section{Regression Model 1: Main Effect Model}
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Construct a regression equation modeling how \texttt{displ} affects \texttt{fuelCost} using \LaTeX{}\ syntax.
+\item Execute a bivariate regression model that shows how \texttt{displ} affects \texttt{fuelCost}.
+\item In a sentence or two, provide an interpretation of the model's beta coefficient.
+\item In a few sentences, summarize the model fit statistics.
+\end{enumerate}
+
+\vspace{3mm}
+\section{Regression Model 2}
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item Construct a regression equation modeling how \texttt{displ} affects \texttt{fuelCost} controlling for characteristics of the engine using \LaTeX{}\ syntax.
+\item Execute a multivariate regression model that shows how \texttt{displ} affects \texttt{fuelCost} controlling for characteristics of the engine.
+\item In a few sentences, provide an interpretation of the model's beta coefficients.
+\item In a few sentences, summarize the model fit statistics.
+\end{enumerate}
+
+\vspace{3mm}
+\section{Regression Model 3: Full Model}
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item Construct a regression equation modeling how \texttt{displ} affects \texttt{fuelCost} controlling for characteristics of the engine and highway fuel efficiency using \LaTeX{}\ syntax.
+\item Execute a multivariate regression model that shows how \texttt{displ} affects \texttt{fuelCost} controlling for characteristics of the engine and highway fuel efficiency.
+\item In a paragraph, provide an interpretation of the model's beta coefficients.
+\item In a few sentences, summarize the model fit statistics.
+\end{enumerate}
+
+\vspace{3mm}
+\section{Communicating the Models' Results}
+\begin{enumerate}
+\setcounter{enumi}{14}
+\item Create a formatted regression table that includes all three models as well as their AIC and BIC summary statistics. Omit the un-adjusted $R^2$ value as well as the degrees of freedom values. Include the \texttt{.html} output in your \texttt{results/} directory; there is not a need to create a Word document for this lab.
+\item In a paragraph, compare how the beta values have changed between models.
+\item In a paragraph, compare the models based on adjusted $R^2$, AIC, and BIC summary statistics. Which model provides the best fit?
+\end{enumerate}
+
+% ============================================================
+\end{document}
