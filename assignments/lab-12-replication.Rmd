@@ -1,0 +1,147 @@
+---
+title: "Lab-13 Replication"
+author: "Christopher Prener, Ph.D."
+output: html_notebook
+---
+
+## Introduction
+This is the replication file for lab-13. 
+
+## Dependencies
+The assignment requires the following packages:
+
+```{r}
+library(dplyr)        # data wrangling
+library(stargazer)    # LaTeX output
+```
+
+## Load Data
+The data for the assignment is found in the `testDriveR` package's `auto17` data set:
+
+```{r}
+library(testDriveR)   # assignment data
+autoData <- auto17
+```
+
+## Set-up
+### Question 1
+
+* H0 = the size of the engine does not have an impact on fuel cost
+* H1 = the size of the engine does have an impact on fuel cost - larger engines will have more expensive fuel costs, controlling for charcteristics of the engine itself and fuel efficency
+
+### Question 2
+
+To get a better sense of whether the proposed number of righthand side variables are appropriate, we need to know the samplesize. The easiest approach for doing that is with the `nrow()` function, which will give us the number of observations in the data frame:
+
+```{r}
+nrow(autoData)
+```
+
+However, this will include observations with missing data. We will exclude those from our analysis when we use the `lm()` function in listwise fashion, so we want to make sure we have a sense of the sample size *with* listwise deletion implemented. The following pipe selects the relevant variables, omits any missing observations, and then prints the sample size:
+
+```{r}
+autoData %>%
+  select(fuelCost, displ, gears, cyl, hwyFE) %>%
+  na.omit() %>%
+  nrow()
+```
+
+The sample size reported here is the same as before, so there is no missing data in our data set!
+
+To answer the question, a sample size of $n=1216$ observations should have no more than 121 right hand variables. Since there are only 21 variables in the entire data set, and we have only proposed to use four of them in the analysis, overfitting is absolutely not a concern.
+
+## Model 1: Main Effect
+### Question 3
+
+The equation for our first regression model, which will estimate the "main effect" of engine size on fuel cost, will be:
+
+$ {y}_{fuelCost} = \alpha + {\beta}_{1}{x}_{displ} + \epsilon $
+
+### Question 4
+Our model is fit in `R` using the `lm()` function. We should save it into an object that indicates it is the first model. We'll use `model1` for that purpose: 
+
+```{r}
+model1 <- lm(fuelCost ~ displ, data = autoData)
+summary(model1)
+```
+
+### Question 5
+A unit increase in engine size is associated with a \$283.83 ($p<.001$) increase in annual fuel costs. Larger engines are more expensive to operate.
+
+### Question 6
+By itself, engine size accounts for 67.71% of the variation in annual fuel costs. We see a low standard error on the displacement variable, but the residual standard error is sizeable - an average error of plus or minus \$267.30 from the regression line. The $f$ statistic indicates that our null hypothesis of all betas equal to zero should be rejected.
+
+## Model 3
+### Question 7
+
+The equation for our second regression model, which includes the main effect plus characteristics of the engine (the number of gears and cylinders in the engine), will be:
+
+$ {y}_{fuelCost} = \alpha + {\beta}_{1}{x}_{displ} + {\beta}_{2}{x}_{gears} + {\beta}_{3}{x}_{cyl} + \epsilon $
+
+### Question 8 
+
+Our model is fit in `R` using the `lm()` function. We should save it into an object that indicates it is the second model. We'll use `model2` for that purpose:
+
+```{r}
+model2 <- lm(fuelCost ~ displ+gears+cyl, data = autoData)
+summary(model2)
+```
+
+### Question 9
+Holding engine characteristics constant, a unit increase in engine size is associated with a \$99.67 annual increase in fuel cost ($p<.001$). As before, larger engines are more expensive to fuel. Both of the engine characteristcs have similar positive effects. A unit increase in gears associated with a \$38.35 annual increase in fuel cost ($p<.001$) and a unit increase in cylinders associated with a \$133.04 annual increase ($p<.001$), holiding constant other factors. In this model, the number of cylinders emerges as the variable with the largest predicted impact on fuel costs.
+
+### Question 10
+This model accounts for 73.74% of the variation in fuel costs. All of the standard errors on the betas are small, though the standard error of the residuals remains substantial - a typical error of plus or minus \$240.90 from the regression line. The $f$ statistic indicates that our null hypothesis of all betas equal to zero should be rejected.
+
+## Model 3 - Final Model
+### Question 11
+
+The equation for our third and final regression model, which includes the main effect plus characteristics of the engine (the number of gears and cylinders in the engine) and highway fuel efficiency, will be:
+
+$ {y}_{fuelCost} = \alpha + {\beta}_{1}{x}_{displ} + {\beta}_{2}{x}_{gears} + {\beta}_{3}{x}_{cyl} + {\beta}_{3}{x}_{hwyFE} + \epsilon $
+
+### Question 12
+
+Our model is fit in `R` using the `lm()` function. We should save it into an object that indicates it is the third model. We'll use `model3` for that purpose:
+
+```{r}
+model3 <- lm(fuelCost ~ displ+gears+cyl+hwyFE, data = autoData)
+summary(model3)
+```
+
+### Question 13
+Holding other factors constant, unit increases in engine size are associated with a decrease of \$29.20 in annual fuel costs ($p=.002$). In other words, as engine size increases, fuel costs are predicted to decrease after controlling for additional factors. Both the number of gears ($\beta=21.53, p<.001$) and cylinders ($\beta=118.20, p<.001$) are associated with increased fuel costs. Unit increases in highway fuel effciency, measured in miles per gallon, are associated with \$46.15 annual decreases in fuel cost ($p<.001$).
+
+### Question 14
+This model accounts for 88.43% of the variation in fuel costs. All of the standard errors on the betas are small, and the standard error of the residuals has decreased significantlly from the prior model - a typical error of plus or minus \$159.90 from the regression line. The $f$ statistic indicates that our null hypothesis of all betas equal to zero should be rejected.
+
+## Communicating the Models' Results
+### Question 15
+
+To put together a table, we want to first save measures of model fit (AIC and BIC) to individual objects. We'll round each value to three significant digits when we do this:
+
+```{r}
+# aic values
+aic1 <- round(AIC(model1), digits = 3)
+aic2 <- round(AIC(model2), digits = 3)
+aic3 <- round(AIC(model3), digits = 3)
+
+# bic values
+bic1 <- round(BIC(model1), digits = 3)
+bic2 <- round(BIC(model2), digits = 3)
+bic3 <- round(BIC(model3), digits = 3)
+```
+
+Once we have the values saved, we can populate our LaTeX table output with them. We'll also omit the unadjusted $R^2$ value and the degrees of freeom for the $f$ statistics.
+
+```{r}
+stargazer(model1, model2, model3, title = "Engine Characteristics' Impact on Annual Fuel Costs", add.lines = list(c("AIC", aic1, aic2, aic3), c("BIC", bic1, bic2, bic3)), omit.stat = "rsq", df = FALSE)
+```
+
+### Question 16
+Across the three models, we see substantial changes in the betas for the displacement variable. The final change, where the sign flips to negative, is particularly notable. This is worthy of further exploration when regression assumptions are checked (a topic we'll cover next week). If you think back to our previous discussions of these data, you'll recall that there is a particular group of vehicles that are outliers in terms of engine size and fuel efficiency - these sports cars are small (and thus light weight), which contributes to a higher fuel economy than their large engine size would otherwise predict. This is potentially the cause of the observed change in the beta values.
+
+On the other measures, we see small changes from model two to model three in both the variables measuring number of gears and number of cylinders. These changes do not shift the overall narrative of the model, however, which is that characteristics of engine size like gears and cyclinders are positively associated with fuel costs.
+
+### Question 17
+Across the three models, we see steady improvements in our indicators of model fit. The adjusted $R^2$ steadily increases from .677 to .884. Our residual standard error decreases steadily, and both our AIC and BIC values see improvement from model to model. All of these indicators suggest that, despite the worrying sign flip on the displacement variable in model three, that model is the best fit.
